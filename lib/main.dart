@@ -1,9 +1,10 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:itera_monitoring_ac/screen/detail_screen.dart';
-import 'package:itera_monitoring_ac/screen/home_screen.dart';
 import 'package:itera_monitoring_ac/screen/login_screen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 

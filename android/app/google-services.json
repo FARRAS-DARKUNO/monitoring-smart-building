@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "486486518113",
+    "firebase_url": "https://ac-itera-default-rtdb.firebaseio.com",
+    "project_id": "ac-itera",
+    "storage_bucket": "ac-itera.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:486486518113:android:0b4bcf08b0bc8eac1afd20",
+        "android_client_info": {
+          "package_name": "com.example.itera_monitoring_ac"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAluklVj9MrBsLfeijws0F5MOmyGiSMkZg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
