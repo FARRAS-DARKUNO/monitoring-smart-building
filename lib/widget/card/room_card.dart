@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:itera_monitoring_ac/data/model/room/room_model.dart';
 import 'package:itera_monitoring_ac/global/colors.dart';
 import 'package:itera_monitoring_ac/global/fonts.dart';
 import 'package:itera_monitoring_ac/global/size.dart';
 import 'package:itera_monitoring_ac/utils/route.dart';
 
 class RoomCard extends StatelessWidget {
-  const RoomCard({super.key});
+  final Room room;
+  const RoomCard({required this.room, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -30,9 +32,8 @@ class RoomCard extends StatelessWidget {
           alignment: Alignment.bottomCenter,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            image: const DecorationImage(
-              image: NetworkImage(
-                  "https://www.justcoglobal.com/wp-content/uploads/2022/06/meeting-rooms.jpg"),
+            image: DecorationImage(
+              image: NetworkImage(room.image),
               fit: BoxFit.cover,
             ),
           ),
@@ -55,9 +56,9 @@ class RoomCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Ruangan A22113', style: h2(cWhite)),
+                Text(room.name, style: h2(cWhite)),
                 Text(
-                  'Gedung A lantai 1 Institut Teknologi Sumatera',
+                  room.description,
                   style: h5(cWhite),
                 ),
                 Container(
@@ -69,9 +70,9 @@ class RoomCard extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text('Device : ', style: body(cWhite)),
-                    Text('12 online ', style: body(cGreen)),
-                    Text('1 offline ', style: body(cRed)),
+                    Text('People : ', style: body(cWhite)),
+                    Text(room.people_count, style: body(cGreen)),
+                    // Text('1 offline ', style: body(cRed)),
                   ],
                 )
               ],

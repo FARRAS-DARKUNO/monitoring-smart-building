@@ -3,7 +3,7 @@ import 'dart:convert';
 class LoginModel {
   final int status;
   final String message;
-  final Login data;
+  final Data data;
   LoginModel({
     required this.status,
     required this.message,
@@ -13,7 +13,7 @@ class LoginModel {
   LoginModel copyWith({
     int? status,
     String? message,
-    Login? data,
+    Data? data,
   }) {
     return LoginModel(
       status: status ?? this.status,
@@ -36,7 +36,7 @@ class LoginModel {
     return LoginModel(
       status: map['status']?.toInt() ?? 0,
       message: map['message'] ?? '',
-      data: Login.fromMap(map['data']),
+      data: Data.fromMap(map['data']),
     );
   }
 
@@ -61,13 +61,13 @@ class LoginModel {
   int get hashCode => status.hashCode ^ message.hashCode ^ data.hashCode;
 }
 
-class Login {
+class Data {
   final int id;
   final String firstName;
   final String lastName;
   final String email;
   final String token;
-  Login({
+  Data({
     required this.id,
     required this.firstName,
     required this.lastName,
@@ -75,14 +75,14 @@ class Login {
     required this.token,
   });
 
-  Login copyWith({
+  Data copyWith({
     int? id,
     String? firstName,
     String? lastName,
     String? email,
     String? token,
   }) {
-    return Login(
+    return Data(
       id: id ?? this.id,
       firstName: firstName ?? this.firstName,
       lastName: lastName ?? this.lastName,
@@ -103,8 +103,8 @@ class Login {
     return result;
   }
 
-  factory Login.fromMap(Map<String, dynamic> map) {
-    return Login(
+  factory Data.fromMap(Map<String, dynamic> map) {
+    return Data(
       id: map['id']?.toInt() ?? 0,
       firstName: map['firstName'] ?? '',
       lastName: map['lastName'] ?? '',
@@ -115,7 +115,7 @@ class Login {
 
   String toJson() => json.encode(toMap());
 
-  factory Login.fromJson(String source) => Login.fromMap(json.decode(source));
+  factory Data.fromJson(String source) => Data.fromMap(json.decode(source));
 
   @override
   String toString() {
@@ -126,7 +126,7 @@ class Login {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
   
-    return other is Login &&
+    return other is Data &&
       other.id == id &&
       other.firstName == firstName &&
       other.lastName == lastName &&
