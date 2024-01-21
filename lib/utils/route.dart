@@ -16,9 +16,9 @@ gotoLogin(BuildContext context) {
   ));
 }
 
-gotoDetail(BuildContext context) {
+gotoDetail(BuildContext context, dynamic id) {
   Navigator.of(context).push(CupertinoPageRoute<void>(
-    builder: (BuildContext context) => const DetailScreen(),
+    builder: (BuildContext context) => DetailScreen(id: id),
   ));
 }
 

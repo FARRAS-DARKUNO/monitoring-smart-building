@@ -1,5 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:itera_monitoring_ac/data/model/room/detail_room.dart';
+import 'package:itera_monitoring_ac/data/repositories/room/detail_room_repository.dart';
 import 'package:itera_monitoring_ac/global/colors.dart';
 import 'package:itera_monitoring_ac/global/fonts.dart';
 import 'package:itera_monitoring_ac/global/size.dart';
@@ -8,7 +10,8 @@ import 'package:itera_monitoring_ac/widget/card/people_card.dart';
 import 'package:itera_monitoring_ac/widget/header/detail_header.dart';
 
 class DetailScreen extends StatefulWidget {
-  const DetailScreen({super.key});
+  final dynamic id;
+  const DetailScreen({required this.id, super.key});
 
   @override
   State<DetailScreen> createState() => _DetailScreenState();
@@ -16,6 +19,26 @@ class DetailScreen extends StatefulWidget {
 
 class _DetailScreenState extends State<DetailScreen> {
   DatabaseReference ref = FirebaseDatabase.instance.ref();
+
+  bool isLoading = true;
+
+  late DetailRoomModel detailRoomModel;
+
+  getData() async {
+    await DetailRoomRepository().getDetailRoom(widget.id).then((value) {
+      setState(() {
+        print(value);
+        detailRoomModel = value;
+        isLoading = false;
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,53 +48,61 @@ class _DetailScreenState extends State<DetailScreen> {
     final double itemHeight = (size.height - kToolbarHeight) / 4.3;
     final double itemWidth = size.width / 2;
     return Scaffold(
-      body: Column(
-        children: [
-          const DetailHeader(),
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-            width: sWidthFull(context),
-            height: sHeightFull(context) - 250,
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  GestureDetector(
-                    onTap: () async {
-                      final snapshot = await ref.child('ac-2-controller').get();
-                      if (snapshot.exists) {
-                        print(snapshot.value);
-                      } else {
-                        print('No data available.');
-                      }
-                      // print(ref.get());
-                      ref.onValue.listen((DatabaseEvent event) {
-                        final data = event.snapshot.value;
-                        print(data);
-                      });
-                    },
-                    child: const PeopleCard(),
+      body: isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : Column(
+              children: [
+                DetailHeader(image: detailRoomModel.data.image),
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                  width: sWidthFull(context),
+                  height: sHeightFull(context) - 250,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        GestureDetector(
+                          // onTap: () async {
+                          //   final snapshot =
+                          //       await ref.child('ac-2-controller').get();
+                          //   if (snapshot.exists) {
+                          //     print(snapshot.value);
+                          //   } else {
+                          //     print('No data available.');
+                          //   }
+                          //   // print(ref.get());
+                          //   ref.onValue.listen((DatabaseEvent event) {
+                          //     final data = event.snapshot.value;
+                          //     print(data);
+                          //   });
+                          // },
+                          child: const PeopleCard(),
+                        ),
+                        GridView.count(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            mainAxisSpacing: 10,
+                            crossAxisSpacing: 10,
+                            childAspectRatio: (itemWidth / itemHeight),
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            crossAxisCount: 2,
+                            // Generate 100 widgets that display their index in the List.
+                            children: detailRoomModel.data.firebase
+                                .map((value) => CardMonitoring(
+                                      name: value.name,
+                                      size: size,
+                                      controlliing: value.link_controlling,
+                                      monitoring: value.link_monitoring,
+                                      unit: value.satuan,
+                                    ))
+                                .toList()
+                            ),
+                      ],
+                    ),
                   ),
-                  GridView.count(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    mainAxisSpacing: 10,
-                    crossAxisSpacing: 10,
-                    childAspectRatio: (itemWidth / itemHeight),
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    crossAxisCount: 2,
-                    // Generate 100 widgets that display their index in the List.
-                    children: [
-                      CardMonitoring(name: "ac-1-controller", size: size),
-                      CardMonitoring(name: "ac-2-controller", size: size),
-                      CardMonitoring(name: "lamp-1-controller", size: size),
-                    ],
-                  ),
-                ],
-              ),
+                )
+              ],
             ),
-          )
-        ],
-      ),
     );
   }
 
@@ -162,4 +193,3 @@ class _DetailScreenState extends State<DetailScreen> {
     );
   }
 }
-

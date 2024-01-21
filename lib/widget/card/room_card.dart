@@ -12,7 +12,7 @@ class RoomCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => gotoDetail(context),
+      onTap: () => gotoDetail(context, room.id),
       child: Container(
         width: sWidthFull(context),
         height: 210,

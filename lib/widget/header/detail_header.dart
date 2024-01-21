@@ -5,7 +5,8 @@ import '../../global/fonts.dart';
 import '../../global/size.dart';
 
 class DetailHeader extends StatelessWidget {
-  const DetailHeader({super.key});
+  final String image;
+  const DetailHeader({required this.image, super.key});
 
   @override
   Widget build(BuildContext context) {

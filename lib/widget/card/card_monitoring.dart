@@ -8,7 +8,16 @@ import 'package:itera_monitoring_ac/global/fonts.dart';
 class CardMonitoring extends StatefulWidget {
   final Size size;
   final String name;
-  const CardMonitoring({required this.name, required this.size, super.key});
+  final String monitoring;
+  final String controlliing;
+  final String unit;
+  const CardMonitoring(
+      {required this.controlliing,
+      required this.name,
+      required this.monitoring,
+      required this.unit,
+      required this.size,
+      super.key});
 
   @override
   State<CardMonitoring> createState() => _CardMonitoringState();
@@ -18,17 +27,30 @@ class _CardMonitoringState extends State<CardMonitoring> {
   DatabaseReference ref = FirebaseDatabase.instance.ref();
 
   bool isCheck = false;
+  dynamic dataMonitor = 0;
   Timer? timer;
 
   getData() async {
-    final snapshot = await ref.child(widget.name).get();
-    if (snapshot.exists) {
+    final snapshotControl = await ref.child(widget.controlliing).get();
+    final snapshotMonitor = await ref.child(widget.monitoring).get();
+    print("Masuk lah kali ya");
+    if (snapshotControl.exists) {
       setState(() {
         if (mounted) {
-          isCheck = snapshot.value as bool;
+          isCheck = snapshotControl.value as bool;
         }
       });
-      print(snapshot.value);
+      print(snapshotControl.value);
+    } else {
+      print('No data available.');
+    }
+    if (snapshotMonitor.exists) {
+      setState(() {
+        if (mounted) {
+          dataMonitor = snapshotMonitor.value ;
+        }
+      });
+      print(snapshotMonitor.value);
     } else {
       print('No data available.');
     }
@@ -57,7 +79,7 @@ class _CardMonitoringState extends State<CardMonitoring> {
   Widget build(BuildContext context) {
     return UnicornOutlineButton(
       onPressed: () async {
-        await ref.update({widget.name: !isCheck}).then((value) {
+        await ref.update({widget.controlliing: !isCheck}).then((value) {
           setState(() {
             isCheck = !isCheck;
           });
@@ -75,15 +97,15 @@ class _CardMonitoringState extends State<CardMonitoring> {
             SizedBox(
               width: widget.size.width / 2 - 60,
               child: Text(
-                widget.name,
+                widget.controlliing,
                 style: h4(cBlack),
                 textAlign: TextAlign.center,
               ),
             ),
-            Text('18', style: h1(cSekunder)),
+            Text('$dataMonitor', style: h1(cSekunder)),
             Column(
               children: [
-                Text('Persen', style: h4(cBlack)),
+                Text(widget.unit, style: h4(cBlack)),
                 Row(
                   children: [
                     Text('Status : ', style: h4(cBlack)),
