@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:itera_monitoring_ac/data/model/room/detail_room.dart';
@@ -19,6 +21,10 @@ class DetailScreen extends StatefulWidget {
 
 class _DetailScreenState extends State<DetailScreen> {
   DatabaseReference ref = FirebaseDatabase.instance.ref();
+  Timer? timer;
+
+  dynamic people = 0;
+  bool status = true;
 
   bool isLoading = true;
 
@@ -62,21 +68,10 @@ class _DetailScreenState extends State<DetailScreen> {
                     child: Column(
                       children: [
                         GestureDetector(
-                          // onTap: () async {
-                          //   final snapshot =
-                          //       await ref.child('ac-2-controller').get();
-                          //   if (snapshot.exists) {
-                          //     print(snapshot.value);
-                          //   } else {
-                          //     print('No data available.');
-                          //   }
-                          //   // print(ref.get());
-                          //   ref.onValue.listen((DatabaseEvent event) {
-                          //     final data = event.snapshot.value;
-                          //     print(data);
-                          //   });
-                          // },
-                          child: const PeopleCard(),
+                          child: PeopleCard(
+                            peeople: detailRoomModel.data.people_count,
+                            status: detailRoomModel.data.status,
+                          ),
                         ),
                         GridView.count(
                             padding: const EdgeInsets.symmetric(vertical: 10),
@@ -95,8 +90,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                       monitoring: value.link_monitoring,
                                       unit: value.satuan,
                                     ))
-                                .toList()
-                            ),
+                                .toList()),
                       ],
                     ),
                   ),

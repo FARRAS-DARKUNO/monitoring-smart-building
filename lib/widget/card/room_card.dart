@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:itera_monitoring_ac/data/model/room/room_model.dart';
 import 'package:itera_monitoring_ac/global/colors.dart';
@@ -5,14 +8,59 @@ import 'package:itera_monitoring_ac/global/fonts.dart';
 import 'package:itera_monitoring_ac/global/size.dart';
 import 'package:itera_monitoring_ac/utils/route.dart';
 
-class RoomCard extends StatelessWidget {
-  final Room room;
+class RoomCard extends StatefulWidget {
+  final Data room;
   const RoomCard({required this.room, super.key});
+
+  @override
+  State<RoomCard> createState() => _RoomCardState();
+}
+
+class _RoomCardState extends State<RoomCard> {
+  dynamic dataMonitor = 0;
+  DatabaseReference ref = FirebaseDatabase.instance.ref();
+
+  Timer? timer;
+
+  getData() async {
+    final snapshotControl = await ref.child(widget.room.people_count).get();
+    print("Masuk lah kali ya");
+    if (snapshotControl.exists) {
+      setState(() {
+        if (mounted) {
+          dataMonitor = snapshotControl.value ;
+        }
+      });
+      print(snapshotControl.value);
+    } else {
+      print('No data available.');
+    }
+  }
+
+  void _refreshPage() {
+    getData();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    getData();
+    timer =
+        Timer.periodic(const Duration(seconds: 2), (Timer t) => _refreshPage());
+  }
+
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
+  }
+
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => gotoDetail(context, room.id),
+      onTap: () => gotoDetail(context, widget.room.id),
       child: Container(
         width: sWidthFull(context),
         height: 210,
@@ -33,7 +81,7 @@ class RoomCard extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             image: DecorationImage(
-              image: NetworkImage(room.image),
+              image: NetworkImage(widget.room.image),
               fit: BoxFit.cover,
             ),
           ),
@@ -56,9 +104,9 @@ class RoomCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(room.name, style: h2(cWhite)),
+                Text(widget.room.name, style: h2(cWhite)),
                 Text(
-                  room.description,
+                  widget.room.description,
                   style: h5(cWhite),
                 ),
                 Container(
@@ -71,7 +119,7 @@ class RoomCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Text('People : ', style: body(cWhite)),
-                    Text(room.people_count, style: body(cGreen)),
+                    Text('$dataMonitor', style: body(cGreen)),
                     // Text('1 offline ', style: body(cRed)),
                   ],
                 )

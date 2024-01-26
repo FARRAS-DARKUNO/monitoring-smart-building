@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 class RoomModel {
   final int status;
   final String message;
-  final List<Room> data;
+  final List<Data> data;
   RoomModel({
     required this.status,
     required this.message,
@@ -15,7 +15,7 @@ class RoomModel {
   RoomModel copyWith({
     int? status,
     String? message,
-    List<Room>? data,
+    List<Data>? data,
   }) {
     return RoomModel(
       status: status ?? this.status,
@@ -38,7 +38,7 @@ class RoomModel {
     return RoomModel(
       status: map['status']?.toInt() ?? 0,
       message: map['message'] ?? '',
-      data: List<Room>.from(map['data']?.map((x) => Room.fromMap(x))),
+      data: List<Data>.from(map['data']?.map((x) => Data.fromMap(x))),
     );
   }
 
@@ -63,7 +63,7 @@ class RoomModel {
   int get hashCode => status.hashCode ^ message.hashCode ^ data.hashCode;
 }
 
-class Room {
+class Data {
   final int id;
   final String name;
   final String description;
@@ -72,7 +72,7 @@ class Room {
   final String people_count;
   final String createdAt;
   final String updatedAt;
-  Room({
+  Data({
     required this.id,
     required this.name,
     required this.description,
@@ -83,7 +83,7 @@ class Room {
     required this.updatedAt,
   });
 
-  Room copyWith({
+  Data copyWith({
     int? id,
     String? name,
     String? description,
@@ -93,7 +93,7 @@ class Room {
     String? createdAt,
     String? updatedAt,
   }) {
-    return Room(
+    return Data(
       id: id ?? this.id,
       name: name ?? this.name,
       description: description ?? this.description,
@@ -120,8 +120,8 @@ class Room {
     return result;
   }
 
-  factory Room.fromMap(Map<String, dynamic> map) {
-    return Room(
+  factory Data.fromMap(Map<String, dynamic> map) {
+    return Data(
       id: map['id']?.toInt() ?? 0,
       name: map['name'] ?? '',
       description: map['description'] ?? '',
@@ -135,7 +135,7 @@ class Room {
 
   String toJson() => json.encode(toMap());
 
-  factory Room.fromJson(String source) => Room.fromMap(json.decode(source));
+  factory Data.fromJson(String source) => Data.fromMap(json.decode(source));
 
   @override
   String toString() {
@@ -146,7 +146,7 @@ class Room {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
   
-    return other is Room &&
+    return other is Data &&
       other.id == id &&
       other.name == name &&
       other.description == description &&
