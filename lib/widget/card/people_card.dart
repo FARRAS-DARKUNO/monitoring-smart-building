@@ -60,7 +60,7 @@ class _PeopleCardState extends State<PeopleCard> {
 
     getData();
     timer =
-        Timer.periodic(const Duration(seconds: 2), (Timer t) => _refreshPage());
+        Timer.periodic(const Duration(seconds: 3), (Timer t) => _refreshPage());
   }
 
   @override

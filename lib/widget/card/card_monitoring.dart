@@ -66,7 +66,7 @@ class _CardMonitoringState extends State<CardMonitoring> {
 
     getData();
     timer =
-        Timer.periodic(const Duration(seconds: 1), (Timer t) => _refreshPage());
+        Timer.periodic(const Duration(seconds: 3), (Timer t) => _refreshPage());
   }
 
   @override

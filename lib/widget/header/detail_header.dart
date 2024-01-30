@@ -15,10 +15,7 @@ class DetailHeader extends StatelessWidget {
         SizedBox(
           height: 250,
           width: sWidthFull(context),
-          child: Image.network(
-            'https://picsum.photos/250?image=9',
-            fit: BoxFit.fill,
-          ),
+          child: Image.network(image, fit: BoxFit.fill),
         ),
         Container(
           padding: EdgeInsets.symmetric(
